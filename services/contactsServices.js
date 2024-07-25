@@ -32,21 +32,14 @@ const addContact = async data => {
 };
 
 const removeContact = async contactId => {
-  try {
-    const contactsList = await listContacts();
-
-    const contactIdx = contactsList.findIndex(({ id }) => id === contactId);
-    if (!~contactIdx) return null;
-
-    const [contact] = contactsList.splice(contactIdx, 1);
-
-    await updateFile(contactsList);
-
-    return contact;
-  } catch (error) {
-    console.log(error.message);
-  }
+  const contactsList = await listContacts();
+  const contactIdx = contactsList.findIndex(({ id }) => id === contactId);
+  if (!~contactIdx) return null;
+  const [contact] = contactsList.splice(contactIdx, 1);
+  await updateFile(contactsList);
+  return contact;
 };
+
 const updateContact = async contactId => {
   try {
     console.log('first');

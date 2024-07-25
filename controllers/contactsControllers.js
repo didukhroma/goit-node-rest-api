@@ -27,7 +27,15 @@ const getOneContact = async ({ params: { id } }, res, next) => {
   }
 };
 
-const deleteContact = (req, res) => {};
+const deleteContact = async ({ params: { id } }, res, next) => {
+  try {
+    const contact = await contactsServices.removeContact(id);
+    if (!contact) throw HttpError(HttpCode[404].code, HttpCode[404].status);
+    res.status(HttpCode[200].code).json({ data: { contact } });
+  } catch (e) {
+    next(e);
+  }
+};
 
 const createContact = (req, res) => {};
 
