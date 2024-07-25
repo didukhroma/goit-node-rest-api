@@ -4,6 +4,7 @@
   "scripts": {
     "start": "node --env-file=.env ./app.js",
     "dev": "nodemon --env-file=.env ./app.js",
+    "prepare": "husky",
     "lint": "biome check --files-ignore-unknown=true",
     "lint:fix": "biome check --write --no-errors-on-unmatched"
   },

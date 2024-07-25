@@ -1,23 +1,23 @@
-import { readFile, writeFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { readFile, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 
-import { nanoid } from "nanoid";
+import { nanoid } from 'nanoid';
 
-const contactsPath = resolve("db", "contacts.json");
+const contactsPath = resolve('db', 'contacts.json');
 
-const updateFile = async (data) => {
-  await writeFile(contactsPath, JSON.stringify(data, null, 2), (err) => {
+const updateFile = async data => {
+  await writeFile(contactsPath, JSON.stringify(data, null, 2), err => {
     throw err;
   });
 };
 
 const listContacts = async () =>
-  JSON.parse(await readFile(contactsPath, "utf-8"));
+  JSON.parse(await readFile(contactsPath, 'utf-8'));
 
-const getContactById = async (contactId) =>
+const getContactById = async contactId =>
   (await listContacts()).find(({ id }) => id === contactId) || null;
 
-const addContact = async (data) => {
+const addContact = async data => {
   const contactId = nanoid();
   const newContact = { id: contactId, ...data };
   try {
@@ -31,7 +31,7 @@ const addContact = async (data) => {
   }
 };
 
-const removeContact = async (contactId) => {
+const removeContact = async contactId => {
   try {
     const contactsList = await listContacts();
 
@@ -47,8 +47,9 @@ const removeContact = async (contactId) => {
     console.log(error.message);
   }
 };
-const updateContact = async (contactId) => {
+const updateContact = async contactId => {
   try {
+    console.log('first');
   } catch (error) {
     console.log(error.message);
   }
