@@ -20,15 +20,9 @@ const getContactById = async contactId =>
 const addContact = async data => {
   const contactId = nanoid();
   const newContact = { id: contactId, ...data };
-  try {
-    const contactsList = await listContacts();
-
-    await updateFile([...contactsList, newContact]);
-
-    return newContact;
-  } catch (error) {
-    console.log(error.message);
-  }
+  const contactsList = await listContacts();
+  await updateFile([...contactsList, newContact]);
+  return newContact;
 };
 
 const removeContact = async contactId => {

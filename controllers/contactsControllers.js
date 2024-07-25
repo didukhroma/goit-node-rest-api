@@ -37,9 +37,21 @@ const deleteContact = async ({ params: { id } }, res, next) => {
   }
 };
 
-const createContact = (req, res) => {};
+const createContact = async ({ body }, res, next) => {
+  try {
+    const contact = await contactsServices.addContact(body);
+    res.status(HttpCode[201].code).json({ data: { contact } });
+  } catch (e) {
+    next(e);
+  }
+};
 
-const updateContact = (req, res) => {};
+const updateContact = (req, res, next) => {
+  try {
+  } catch (e) {
+    next(e);
+  }
+};
 
 export default {
   getAllContacts,
