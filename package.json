@@ -1,9 +1,12 @@
 {
   "name": "goit-node-rest-api",
   "type": "module",
+  "homepage": "https://didukhroma.github.io/goit-node-rest-api",
   "scripts": {
     "start": "node --env-file=.env ./app.js",
     "dev": "nodemon --env-file=.env ./app.js",
+    "build": "node ./app.js",
+    "deploy": "gh-pages -d build",
     "prepare": "husky",
     "lint": "biome check --files-ignore-unknown=true",
     "lint:fix": "biome check --write --no-errors-on-unmatched"
@@ -17,6 +20,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
+    "gh-pages": "^6.1.1",
     "husky": "^9.1.1",
     "lint-staged": "^15.2.7",
     "nodemon": "^3.0.2"
