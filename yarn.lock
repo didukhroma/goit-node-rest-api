@@ -513,19 +513,6 @@ get-stream@^8.0.1:
   resolved "https://registry.npmjs.org/get-stream/-/get-stream-8.0.1.tgz"
   integrity sha512-VaUJspBffn/LMCJVoMvSAdmscJyS1auj5Zulnn5UoYcY531UWmdwhRWkcGKnGU93m5HSXP9LP2usOryrBtQowA==
 
-gh-pages@^6.1.1:
-  version "6.1.1"
-  resolved "https://registry.npmjs.org/gh-pages/-/gh-pages-6.1.1.tgz"
-  integrity sha512-upnohfjBwN5hBP9w2dPE7HO5JJTHzSGMV1JrLrHvNuqmjoYHg6TBrCcnEoorjG/e0ejbuvnwyKMdTyM40PEByw==
-  dependencies:
-    async "^3.2.4"
-    commander "^11.0.0"
-    email-addresses "^5.0.0"
-    filenamify "^4.3.0"
-    find-cache-dir "^3.3.1"
-    fs-extra "^11.1.1"
-    globby "^6.1.0"
-
 glob-parent@~5.1.2:
   version "5.1.2"
   resolved "https://registry.npmjs.org/glob-parent/-/glob-parent-5.1.2.tgz"
