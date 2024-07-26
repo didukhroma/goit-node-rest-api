@@ -1,11 +1,45 @@
-import contactsService from "../services/contactsServices.js";
+import ctrlWrapper from '../decorators/ctrlWrapper.js';
+import HttpCode from '../helpers/HttpCode.js';
+import HttpError from '../helpers/HttpError.js';
+import contactsServices from '../services/contactsServices.js';
 
-export const getAllContacts = (req, res) => {};
+const getAllContacts = async (_, res) => {
+  const contacts = await contactsServices.listContacts();
+  res.json({
+    contacts,
+  });
+};
 
-export const getOneContact = (req, res) => {};
+const getOneContact = async ({ params: { id } }, res) => {
+  const contact = await contactsServices.getContactById(id);
+  if (!contact) throw HttpError(HttpCode[404].code);
+  res.json({ contact });
+};
 
-export const deleteContact = (req, res) => {};
+const deleteContact = async ({ params: { id } }, res) => {
+  const contact = await contactsServices.removeContact(id);
+  if (!contact) throw HttpError(HttpCode[404].code);
+  res.json({ contact });
+};
 
-export const createContact = (req, res) => {};
+const createContact = async ({ body }, res) => {
+  const contact = await contactsServices.addContact(body);
+  res.status(HttpCode[201].code).json({ contact });
+};
 
-export const updateContact = (req, res) => {};
+const updateContact = async ({ params: { id }, body }, res) => {
+  if (!Object.keys(body).length) {
+    throw HttpError(HttpCode[404].code, 'Body must have at least one field');
+  }
+  const contact = await contactsServices.updateContact(id, body);
+  if (!contact) throw HttpError(HttpCode[404].code);
+  res.json({ contact });
+};
+
+export default {
+  getAllContacts: ctrlWrapper(getAllContacts),
+  getOneContact: ctrlWrapper(getOneContact),
+  deleteContact: ctrlWrapper(deleteContact),
+  createContact: ctrlWrapper(createContact),
+  updateContact: ctrlWrapper(updateContact),
+};
