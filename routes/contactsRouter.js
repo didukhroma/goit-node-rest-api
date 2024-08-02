@@ -4,10 +4,12 @@ import validateBody from '../decorators/validateBody.js';
 import {
   createContactSchema,
   updateContactSchema,
+  updateContactStatusSchema,
 } from '../schemas/contactsSchemas.js';
 
 const createContactMiddleware = validateBody(createContactSchema);
 const updateContactMiddleware = validateBody(updateContactSchema);
+const updateContactStatusMiddleware = validateBody(updateContactStatusSchema);
 
 const contactsRouter = express.Router();
 
@@ -27,6 +29,11 @@ contactsRouter.put(
   '/:id',
   updateContactMiddleware,
   contactsControllers.updateContact,
+);
+contactsRouter.patch(
+  '/:contactId/favorite/',
+  updateContactStatusMiddleware,
+  contactsControllers.updateStatusContact,
 );
 
 export default contactsRouter;

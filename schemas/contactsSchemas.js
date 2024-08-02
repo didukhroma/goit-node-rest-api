@@ -22,6 +22,7 @@ export const createContactSchema = Joi.object({
     'string.max': 'The phone length must be maximum 15 symbols',
     'any.required': 'Phone must be exist',
   }),
+  favorite: Joi.boolean().default(false),
 });
 
 export const updateContactSchema = Joi.object({
@@ -41,5 +42,12 @@ export const updateContactSchema = Joi.object({
   phone: Joi.string().min(9).max(15).messages({
     'string.min': 'The phone length must be at least 9 symbols',
     'string.max': 'The phone length must be maximum 15 symbols',
+  }),
+  favorite: Joi.boolean().default(false),
+});
+
+export const updateContactStatusSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    'any.required': 'Status must be exist',
   }),
 });
