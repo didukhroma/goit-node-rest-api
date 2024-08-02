@@ -31,9 +31,9 @@ contactsRouter.put(
   contactsControllers.updateContact,
 );
 contactsRouter.patch(
-  '/:contactId/favorite/',
+  '/:id/favorite/',
   updateContactStatusMiddleware,
-  contactsControllers.updateStatusContact,
+  contactsControllers.updateContact,
 );
 
 export default contactsRouter;
