@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import morgan from 'morgan';
+import 'dotenv/config';
 
 import sequelize from './db/sequelize.js';
 import HttpCode from './helpers/HttpCode.js';
