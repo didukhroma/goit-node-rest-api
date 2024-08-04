@@ -33,7 +33,7 @@ contactsRouter.put(
 contactsRouter.patch(
   '/:id/favorite/',
   updateContactStatusMiddleware,
-  contactsControllers.updateContact,
+  contactsControllers.updateStatusContact,
 );
 
 export default contactsRouter;
