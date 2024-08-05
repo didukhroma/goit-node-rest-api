@@ -1,7 +1,9 @@
 import cors from 'cors';
 import express from 'express';
 import morgan from 'morgan';
+import 'dotenv/config';
 
+import sequelize from './db/sequelize.js';
 import HttpCode from './helpers/HttpCode.js';
 import contactsRouter from './routes/contactsRouter.js';
 
@@ -24,8 +26,15 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(
-    `Server is running. Use our API on port: ${process.env.PORT || 3000}`,
-  );
-});
+try {
+  await sequelize.authenticate();
+  console.log('Database connection successful');
+  app.listen(process.env.PORT || 3000, () => {
+    console.log(
+      `Server is running. Use our API on port: ${process.env.PORT || 3000}`,
+    );
+  });
+} catch (e) {
+  console.log(e);
+  process.exit(1);
+}
