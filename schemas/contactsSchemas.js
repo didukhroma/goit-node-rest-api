@@ -1,53 +1,27 @@
 import Joi from 'joi';
 
 export const createContactSchema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required().messages({
-    'string.alphanum': 'The name value only contain a-z, A-Z, and 0-9 symbols',
-    'string.min': 'The name length must be at least 3 symbols',
-    'string.max': 'The name length must be maximum 30 symbols',
-    'any.required': 'Title must be exist',
-  }),
+  name: Joi.string().alphanum().min(3).max(30).required(),
   email: Joi.string()
     .email({
       minDomainSegments: 2,
       tlds: { allow: ['com', 'net'] },
     })
-    .required()
-    .messages({
-      'string.email': 'Email must be a valid with .com or .net domains',
-      'any.required': 'Email must be exist',
-    }),
-  phone: Joi.string().min(9).max(15).required().messages({
-    'string.min': 'The phone length must be at least 9 symbols',
-    'string.max': 'The phone length must be maximum 15 symbols',
-    'any.required': 'Phone must be exist',
-  }),
+    .required(),
+  phone: Joi.string().min(9).max(15).required(),
   favorite: Joi.boolean().default(false),
 });
 
 export const updateContactSchema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).messages({
-    'string.alphanum': 'The name value only contain a-z, A-Z, and 0-9 symbols',
-    'string.min': 'The name length must be at least 3 symbols',
-    'string.max': 'The name length must be maximum 30 symbols',
+  name: Joi.string().alphanum().min(3).max(30),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ['com', 'net'] },
   }),
-  email: Joi.string()
-    .email({
-      minDomainSegments: 2,
-      tlds: { allow: ['com', 'net'] },
-    })
-    .messages({
-      'string.email': 'Email must be a valid with .com or .net domains',
-    }),
-  phone: Joi.string().min(9).max(15).messages({
-    'string.min': 'The phone length must be at least 9 symbols',
-    'string.max': 'The phone length must be maximum 15 symbols',
-  }),
+  phone: Joi.string().min(9).max(15),
   favorite: Joi.boolean().default(false),
 });
 
 export const updateContactStatusSchema = Joi.object({
-  favorite: Joi.boolean().required().messages({
-    'any.required': 'Status must be exist',
-  }),
+  favorite: Joi.boolean().required(),
 });
