@@ -15,7 +15,7 @@ const authenticate = async (req, _, next) => {
   }
 
   try {
-    const { id } = jwt.verify(token, process.env.SECRET_KEY);
+    const { id } = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
     const user = await authServices.findUser({ id });
 
