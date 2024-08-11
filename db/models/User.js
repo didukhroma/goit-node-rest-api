@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { emailRegex } from '../../constants/authConstants.js';
-import { subscriptionPlans } from '../../constants/subscription.js';
+import { subscriptionPlans } from '../../constants/subscriptionPlans.js';
 import sequelize from '../sequelize.js';
 
 const User = sequelize.define(
@@ -39,5 +39,5 @@ const User = sequelize.define(
     updatedAt: false,
   },
 );
-// User.sync({ alter: true });
+
 export default User;

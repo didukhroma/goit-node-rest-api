@@ -44,5 +44,4 @@ const Contact = sequelize.define(
     updatedAt: false,
   },
 );
-
 export default Contact;

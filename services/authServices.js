@@ -30,7 +30,7 @@ const signIn = async data => {
     { id: user.dataValues.id },
     process.env.JWT_SECRET_KEY,
     {
-      expiresIn: '7d',
+      expiresIn: '24h',
     },
   );
   const result = await User.update(
