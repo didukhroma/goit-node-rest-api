@@ -1,7 +1,6 @@
 import Contact from '../db/models/Contact.js';
 
 const listContacts = (userId, searchQuery) => {
-  console.log(searchQuery);
   if (Object.keys(searchQuery) === 1) {
     return Contact.findAll({
       where: {
