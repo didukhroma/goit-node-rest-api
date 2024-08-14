@@ -1,8 +1,13 @@
+import * as fs from 'node:fs/promises';
+import path from 'node:path';
+
 import ctrlWrapper from '../decorators/ctrlWrapper.js';
 import HttpCode from '../helpers/HttpCode.js';
 import HttpError from '../helpers/HttpError.js';
 
 import authServices from '../services/authServices.js';
+
+const avatarsPath = path.resolve('public', 'avatars');
 
 const signup = async ({ body: { email, password } }, res) => {
   const newUser = await authServices.signUp(email, password);
@@ -38,19 +43,35 @@ const current = async (req, res) => {
 };
 
 const updateSubscription = async (
-  { user: { id }, body: { subscription: newSubscription } },
+  { user: { id }, body: { subscription } },
   res,
 ) => {
-  const updatedUser = await authServices.updateSubscription(
-    id,
-    newSubscription,
-  );
+  const data = { subscription };
+  const query = { id };
 
-  const { email, subscription } = updatedUser;
+  const updatedUser = await authServices.updateUser(query, data);
+
   res.json({
-    email,
-    subscription,
+    email: updatedUser.email,
+    subscription: updatedUser.subscription,
   });
+};
+
+const updateAvatar = async (
+  { user: { id }, file: { path: oldPath, filename } },
+  res,
+) => {
+  const newPath = path.join(avatarsPath, filename);
+  await fs.rename(oldPath, newPath);
+  const avatarURL = path.join('avatars', filename);
+
+  const data = {
+    avatarURL,
+  };
+  const query = { id };
+  const updatedUser = await authServices.updateUser(query, data);
+
+  res.json({ avatarURL: updatedUser.avatarURL });
 };
 
 export default {
@@ -59,4 +80,5 @@ export default {
   signout: ctrlWrapper(signout),
   current: ctrlWrapper(current),
   updateSubscription: ctrlWrapper(updateSubscription),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };

@@ -1,20 +1,27 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../db/models/User.js';
+import createAvatar from '../helpers/createAvatar.js';
 
 const findUser = async query => await User.findOne({ where: query });
 
+const updateUser = async (query, data, returning = true) => {
+  const result = await User.update({ ...data }, { where: query, returning });
+  if (!result[0]) return result[0];
+  const [updatedUser] = result[1];
+  return updatedUser.dataValues;
+};
+
 const signUp = async (email, password) => {
+  const avatarURL = createAvatar(email);
   const hashPassword = await bcrypt.hash(password, 10);
   const newUser = await User.create({
     email,
     password: hashPassword,
+    avatarURL,
   });
   return { email: newUser.email, subscription: newUser.subscription };
 };
-
-const signOut = async id =>
-  await User.update({ token: null }, { where: { id } });
 
 const signIn = async data => {
   const { email } = data;
@@ -33,29 +40,23 @@ const signIn = async data => {
       expiresIn: '24h',
     },
   );
-  const result = await User.update(
-    { token },
-    { where: { email: data.email }, returning: true },
-  );
-  if (!result[0]) return result[0];
-  const [updatedUser] = result[1];
-  return updatedUser.dataValues;
+
+  const userData = { token };
+  const query = { email };
+  const updatedUser = await updateUser(query, userData);
+  return updatedUser;
 };
 
-const updateSubscription = async (id, subscription) => {
-  const result = await User.update(
-    { subscription },
-    { where: { id }, returning: true },
-  );
-  if (!result[0]) return result[0];
-  const [updatedUser] = result[1];
-  return updatedUser.dataValues;
+const signOut = async id => {
+  const data = { token: null };
+  const query = { id };
+  await updateUser(query, data);
 };
 
 export default {
   findUser,
+  updateUser,
   signUp,
-  signOut,
   signIn,
-  updateSubscription,
+  signOut,
 };
