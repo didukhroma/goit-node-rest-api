@@ -9,7 +9,7 @@ import {
   authSubscriptionSchema,
 } from '../schemas/authSchemas.js';
 
-const signupUserMiddleware = validateBody(authSignUpSchema);
+export const signupUserMiddleware = validateBody(authSignUpSchema);
 const updateSubscriptionMiddleware = validateBody(authSubscriptionSchema);
 
 const authRouter = express.Router();
