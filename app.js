@@ -13,6 +13,7 @@ const app = express();
 app.use(morgan('tiny'));
 app.use(cors());
 app.use(express.json());
+app.use(express.static('public'));
 
 app.use('/api/auth', authRouter);
 app.use('/api/contacts', contactsRouter);
@@ -28,10 +29,12 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
+let server = null;
+
 try {
   await sequelize.authenticate();
   console.log('Database connection successful');
-  app.listen(process.env.PORT || 3000, () => {
+  server = app.listen(process.env.PORT || 3000, () => {
     console.log(
       `Server is running. Use our API on port: ${process.env.PORT || 3000}`,
     );
@@ -40,3 +43,5 @@ try {
   console.log(e);
   process.exit(1);
 }
+
+export default server;

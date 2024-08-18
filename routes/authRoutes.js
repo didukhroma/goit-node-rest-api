@@ -3,12 +3,13 @@ import express from 'express';
 import authControllers from '../controllers/authControllers.js';
 import validateBody from '../decorators/validateBody.js';
 import authenticate from '../middlewares/authenticate.js';
+import upload from '../middlewares/upload.js';
 import {
   authSignUpSchema,
   authSubscriptionSchema,
 } from '../schemas/authSchemas.js';
 
-const signupUserMiddleware = validateBody(authSignUpSchema);
+export const signupUserMiddleware = validateBody(authSignUpSchema);
 const updateSubscriptionMiddleware = validateBody(authSubscriptionSchema);
 
 const authRouter = express.Router();
@@ -27,6 +28,12 @@ authRouter.patch(
   updateSubscriptionMiddleware,
   authenticate,
   authControllers.updateSubscription,
+);
+authRouter.patch(
+  '/avatars',
+  upload.single('avatar'),
+  authenticate,
+  authControllers.updateAvatar,
 );
 
 export default authRouter;

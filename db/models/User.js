@@ -29,6 +29,7 @@ const User = sequelize.define(
       values: subscriptionPlans,
       defaultValue: 'starter',
     },
+    avatarURL: { type: DataTypes.STRING },
     token: {
       type: DataTypes.STRING,
       defaultValue: null,
@@ -39,5 +40,6 @@ const User = sequelize.define(
     updatedAt: false,
   },
 );
+// User.sync({ force: true });
 
 export default User;
