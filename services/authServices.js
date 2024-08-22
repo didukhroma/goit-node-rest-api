@@ -1,7 +1,9 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { nanoid } from 'nanoid';
 import User from '../db/models/User.js';
 import createAvatar from '../helpers/createAvatar.js';
+import sendEmail from '../helpers/sendEmail.js';
 
 const findUser = async query => await User.findOne({ where: query });
 
@@ -19,14 +21,23 @@ const signUp = async (email, password) => {
     email,
     password: hashPassword,
     avatarURL,
+    verificationToken: nanoid(),
   });
-  return { email: newUser.email, subscription: newUser.subscription };
+  await sendEmail(newUser.email, newUser.verificationToken);
+  return {
+    email: newUser.email,
+    subscription: newUser.subscription,
+  };
 };
 
 const signIn = async data => {
   const { email } = data;
   const user = await findUser({ email });
   if (!user) return user;
+  if (!user.verify) {
+    user.message = 'Email not verified';
+    return user;
+  }
   const checkPassword = await bcrypt.compare(
     data.password,
     user.dataValues.password,
@@ -53,10 +64,19 @@ const signOut = async id => {
   await updateUser(query, data);
 };
 
+const verifyUser = async verificationToken => {
+  const user = await findUser({ verificationToken });
+  if (!user) return user;
+  const data = { verificationToken: null, verify: true };
+  const updatedUser = await updateUser({ verificationToken }, data);
+  return updatedUser;
+};
+
 export default {
   findUser,
   updateUser,
   signUp,
   signIn,
   signOut,
+  verifyUser,
 };

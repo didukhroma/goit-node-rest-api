@@ -5,18 +5,21 @@ import ctrlWrapper from '../decorators/ctrlWrapper.js';
 import HttpCode from '../helpers/HttpCode.js';
 import HttpError from '../helpers/HttpError.js';
 
+import sendEmail from '../helpers/sendEmail.js';
 import authServices from '../services/authServices.js';
 
 const avatarsPath = path.resolve('public', 'avatars');
 
 const signup = async ({ body: { email, password } }, res) => {
   const newUser = await authServices.signUp(email, password);
+
   res.status(HttpCode[201].code).json({ user: newUser });
 };
 
 const signin = async (req, res) => {
   const user = await authServices.signIn(req.body);
   if (!user) throw HttpError(HttpCode[401].code, 'Email or password is wrong');
+  if (user?.message) throw HttpError(HttpCode[400].code, user.message);
 
   const { token, email, subscription } = user;
 
@@ -74,6 +77,32 @@ const updateAvatar = async (
   res.json({ avatarURL: updatedUser.avatarURL });
 };
 
+const verifyUser = async ({ params: { verificationToken } }, res) => {
+  const user = await authServices.verifyUser(verificationToken);
+  if (!user) {
+    throw HttpError(HttpCode[404].code, 'User not found');
+  }
+
+  res.json({ message: 'Verification successful' });
+};
+
+const resendVerification = async ({ body: { email } }, res) => {
+  const user = await authServices.findUser({ email });
+
+  if (!user) {
+    throw HttpError(HttpCode[404].code, 'Email not found');
+  }
+
+  const {
+    dataValues: { verify, email: userEmail, verificationToken },
+  } = user;
+  if (verify) {
+    throw HttpError(HttpCode[400].code, 'Verification has already been passed');
+  }
+  await sendEmail(userEmail, verificationToken);
+  res.json({ message: 'Verification email sent' });
+};
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
@@ -81,4 +110,6 @@ export default {
   current: ctrlWrapper(current),
   updateSubscription: ctrlWrapper(updateSubscription),
   updateAvatar: ctrlWrapper(updateAvatar),
+  verifyUser: ctrlWrapper(verifyUser),
+  resendVerification: ctrlWrapper(resendVerification),
 };

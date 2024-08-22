@@ -12,3 +12,10 @@ export const authSubscriptionSchema = Joi.object({
     .valid(...subscriptionPlans)
     .required(),
 });
+
+export const authVerifySchema = Joi.object({
+  email: Joi.string()
+    .pattern(emailRegex)
+    .required()
+    .messages({ 'any.required': 'missing required field email' }),
+});

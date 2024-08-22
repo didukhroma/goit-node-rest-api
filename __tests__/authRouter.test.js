@@ -3,7 +3,7 @@ import request from 'supertest';
 import app from '../app.js';
 import authServices from '../services/authServices.js';
 
-describe('test / login route', () => {
+describe('integration test / login route', () => {
   afterAll(() => {
     app.close();
   });
@@ -15,7 +15,7 @@ describe('test / login route', () => {
     };
 
     const {
-      dataValues: { subscription, id },
+      dataValues: { subscription },
     } = await authServices.findUser({
       email: signInData.email,
     });

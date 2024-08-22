@@ -7,10 +7,12 @@ import upload from '../middlewares/upload.js';
 import {
   authSignUpSchema,
   authSubscriptionSchema,
+  authVerifySchema,
 } from '../schemas/authSchemas.js';
 
 export const signupUserMiddleware = validateBody(authSignUpSchema);
 const updateSubscriptionMiddleware = validateBody(authSubscriptionSchema);
+const verifyUserMiddleware = validateBody(authVerifySchema);
 
 const authRouter = express.Router();
 
@@ -34,6 +36,12 @@ authRouter.patch(
   upload.single('avatar'),
   authenticate,
   authControllers.updateAvatar,
+);
+authRouter.get('/verify/:verificationToken', authControllers.verifyUser);
+authRouter.post(
+  '/verify',
+  verifyUserMiddleware,
+  authControllers.resendVerification,
 );
 
 export default authRouter;
